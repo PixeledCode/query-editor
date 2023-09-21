@@ -1,36 +1,70 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Github, Play } from 'lucide-react'
+import Editor from 'react-simple-code-editor'
 import './App.css'
 import { Button } from './components/ui/button'
+import { Separator } from './components/ui/separator'
+
+// @ts-ignore
+import { highlight, languages } from 'prismjs/components/prism-core'
+import 'prismjs/components/prism-clike'
+import 'prismjs/components/prism-sql'
+import 'prismjs/themes/prism.css'
+import React from 'react'
+import { ResultTable } from './components/results'
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <Button onClick={() => setCount((count) => count + 1)}>
-          count sis {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	const [code, setCode] = React.useState(
+		`SELECT CustomerName, City FROM Customers; `
+	)
+	return (
+		<>
+			<header className="flex items-center py-2 px-4 justify-between text-background bg-foreground">
+				<h1 className="text-xl font-bold">Query Editor</h1>
+				<a href="https://github.com/pixeledCode/query-editor" target="_blank">
+					<Github />
+					<span className="sr-only">Github repository for Query Editor</span>
+				</a>
+			</header>
+			<main>
+				<div>
+					<section className="flex items-center gap-2 justify-between mt-4 px-4">
+						<h2 className="text-lg font-bold">Query Name</h2>
+						<div className="flex items-center gap-4">
+							<Button variant="secondary" size="sm">
+								Save
+							</Button>
+							<Button size="sm">
+								<div className="flex items-center gap-2">
+									<Play size="16" />
+									<span>Run</span>
+								</div>
+							</Button>
+						</div>
+					</section>
+					<Separator className="mt-4" />
+					<div>
+						<Editor
+							value={code}
+							onValueChange={(code) => setCode(code)}
+							highlight={(code) => highlight(code, languages.sql)}
+							padding={10}
+							style={{
+								fontFamily: '"Fira code", "Fira Mono", monospace',
+								fontSize: 12,
+								height: '400px',
+								overflow: 'scroll',
+							}}
+						/>
+						<Separator className="mt-4" />
+						<div className="p-4">
+							<h2 className="text-lg font-bold text-start">Results</h2>
+							<ResultTable />
+						</div>
+					</div>
+				</div>
+			</main>
+		</>
+	)
 }
 
 export default App
