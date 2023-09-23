@@ -10,6 +10,7 @@ import React from 'react'
 import { ResultTable } from './components/results'
 import Papa from 'papaparse'
 import { QueryHeader } from './components/query-pane'
+import { SavedPane } from './components/saved-pane'
 
 const availableTables = [
 	'categories',
@@ -44,8 +45,6 @@ function App() {
 		})
 	}, [file])
 
-	console.log(tableData)
-
 	return (
 		<>
 			<header className="flex items-center py-2 px-4 justify-between text-background bg-foreground">
@@ -55,8 +54,9 @@ function App() {
 					<span className="sr-only">Github repository for Query Editor</span>
 				</a>
 			</header>
-			<main>
-				<div>
+			<main className="flex">
+				<SavedPane />
+				<div className="w-[calc(100%_-_320px)]">
 					<QueryHeader setFile={setFile} randomFileName={randomFileName} />
 					<Separator className="mt-4" />
 					<div>
