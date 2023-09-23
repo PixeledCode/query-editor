@@ -14,7 +14,7 @@ export const MobilePane = () => {
 					<Menu />
 				</SheetTrigger>
 				<SheetContent side="left" className="h-[100vh] overflow-y-auto w-auto">
-					<SavedPane />
+					<SavedPane setIsOpen={setIsOpen} />
 				</SheetContent>
 			</Sheet>
 		</div>

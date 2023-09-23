@@ -52,7 +52,6 @@ export const QueryHeader = ({
 	const updateSelectedQuery = useQueryStore(
 		(state) => state.updateSelectedQuery
 	)
-	console.log(newQueryObject)
 
 	const [file, setFile] = React.useState(randomFileName)
 

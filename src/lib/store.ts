@@ -65,6 +65,8 @@ export const useQueryStore = create<State>()(
 			deleteQuery: (key: string) =>
 				set((state) => {
 					const { [key]: deleted, ...rest } = state.queries
+					console.log(`deleted: ${deleted.title}`)
+
 					return { queries: rest }
 				}),
 		}),

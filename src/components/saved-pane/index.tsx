@@ -3,7 +3,11 @@ import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
 import { useQueryStore } from '@/lib/store'
 
-export const SavedPane = () => {
+export const SavedPane = ({
+	setIsOpen,
+}: {
+	setIsOpen?: (e: boolean) => void
+}) => {
 	const queries = useQueryStore((state) => state.queries)
 	const deleteQuery = useQueryStore((state) => state.deleteQuery)
 	const updateSelectedQuery = useQueryStore(
@@ -33,8 +37,8 @@ export const SavedPane = () => {
 						<button
 							className="flex flex-col gap-2 p-4 hover:bg-indigo-100 text-start w-full"
 							onClick={() => {
-								console.log(key)
 								updateSelectedQuery(key)
+								setIsOpen && setIsOpen(false)
 							}}
 							key={key}
 						>
