@@ -3,7 +3,7 @@ import React from 'react'
 import { Button } from '../ui/button'
 
 export const QueryName = () => {
-	const [queryName, setQueryName] = React.useState('Query Name')
+	const [queryName, setQueryName] = React.useState('Customers')
 	const [isEditing, setIsEditing] = React.useState(false)
 
 	return (
