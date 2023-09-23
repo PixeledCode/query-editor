@@ -1,7 +1,6 @@
-import { Github, Play } from 'lucide-react'
+import { Github } from 'lucide-react'
 import Editor from 'react-simple-code-editor'
 import './App.css'
-import { Button } from './components/ui/button'
 import { Separator } from './components/ui/separator'
 
 // @ts-ignore
@@ -12,7 +11,7 @@ import 'prismjs/themes/prism.css'
 import React from 'react'
 import { ResultTable } from './components/results'
 import Papa from 'papaparse'
-import { useToast } from '@/components/ui/use-toast'
+import { QueryHeader } from './components/query-pane'
 
 const availableTables = [
 	'categories',
@@ -34,8 +33,6 @@ function App() {
 	const [code, setCode] = React.useState(
 		`SELECT CustomerName, City FROM Customers; `
 	)
-
-	const { toast } = useToast()
 
 	React.useEffect(() => {
 		Papa.parse(`/csv/${file}.csv`, {
@@ -59,37 +56,7 @@ function App() {
 			</header>
 			<main>
 				<div>
-					<section className="flex items-center gap-2 justify-between mt-4 px-4">
-						<h2 className="text-lg font-bold">Query Name</h2>
-						<div className="flex items-center gap-4">
-							<Button
-								variant="secondary"
-								size="sm"
-								onClick={() => {
-									toast({
-										title: 'Query saved successfully!',
-									})
-								}}
-							>
-								Save
-							</Button>
-							<Button
-								size="sm"
-								onClick={() => {
-									setFile(randomFileName())
-									toast({
-										title: 'Query run successfully!',
-										variant: 'default',
-									})
-								}}
-							>
-								<div className="flex items-center gap-2">
-									<Play size="16" />
-									<span>Run</span>
-								</div>
-							</Button>
-						</div>
-					</section>
+					<QueryHeader setFile={setFile} randomFileName={randomFileName} />
 					<Separator className="mt-4" />
 					<div>
 						<Editor
