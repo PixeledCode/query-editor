@@ -33,14 +33,12 @@ function App() {
 					<span className="sr-only">Github repository for Query Editor</span>
 				</a>
 			</header>
-			<main className="flex">
-				<SavedPane />
-				<div className="w-[calc(100%_-_320px)]">
-					<QueryHeader
-						setTableData={setTableData}
-						selectedQuery={selectedQuery}
-						code={code}
-					/>
+			<main className="md:flex">
+				<div className="hidden md:grid">
+					<SavedPane />
+				</div>
+				<div className="md:w-[calc(100%_-_320px)]">
+					<QueryHeader setTableData={setTableData} code={code} />
 					<Separator className="mt-4" />
 					<div>
 						<Editor

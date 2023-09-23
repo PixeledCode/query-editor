@@ -5,6 +5,7 @@ import { QueryName } from './query-name'
 import React from 'react'
 import Papa from 'papaparse'
 import { useQueryStore } from '@/lib/store'
+import { MobilePane } from '../saved-pane/mobile'
 
 const availableTables = [
 	'categories',
@@ -22,22 +23,16 @@ function randomFileName() {
 
 type HeaderProps = {
 	setTableData: React.Dispatch<React.SetStateAction<any[]>>
-	selectedQuery: {
-		title: string
-		query: string
-	}
 	code: string
 }
 
-export const QueryHeader = ({
-	setTableData,
-	selectedQuery,
-	code,
-}: HeaderProps) => {
+export const QueryHeader = ({ setTableData, code }: HeaderProps) => {
 	const [file, setFile] = React.useState(randomFileName)
 	const { toast } = useToast()
 
+	const queries = useQueryStore((state) => state.queries)
 	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
+	const selectedQuery = queries[selectedQueryKey]
 	const updateQuery = useQueryStore((state) => state.updateQuery)
 
 	React.useEffect(() => {
@@ -53,8 +48,12 @@ export const QueryHeader = ({
 	}, [file, setTableData])
 
 	return (
-		<section className="flex items-center gap-2 justify-between mt-4 px-4">
-			<QueryName selectedQuery={selectedQuery} />
+		<section className="flex items-center flex-wrap gap-2 justify-between mt-4 px-4">
+			<div className="flex items-center gap-3">
+				<MobilePane />
+				<QueryName selectedQuery={selectedQuery} />
+			</div>
+
 			<div className="flex items-center gap-4">
 				<Button
 					variant="secondary"
