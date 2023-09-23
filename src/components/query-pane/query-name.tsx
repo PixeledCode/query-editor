@@ -6,16 +6,27 @@ import { useToast } from '../ui/use-toast'
 
 export const QueryName = ({
 	selectedQuery,
-	queryName,
-	setQueryName,
+	setNewQueryObject,
+	newQueryObject,
 }: {
 	selectedQuery: {
 		title: string
 		query: string
+	} | null
+	setNewQueryObject: React.Dispatch<
+		React.SetStateAction<{
+			title: string
+			query: string
+		}>
+	>
+	newQueryObject: {
+		title: string
+		query: string
 	}
-	queryName: string
-	setQueryName: React.Dispatch<React.SetStateAction<string>>
 }) => {
+	const [queryName, setQueryName] = React.useState(
+		selectedQuery ? selectedQuery?.title : newQueryObject.title
+	)
 	const [isEditing, setIsEditing] = React.useState(false)
 	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
 	const updateQuery = useQueryStore((state) => state.updateQuery)
@@ -23,9 +34,13 @@ export const QueryName = ({
 	const { toast } = useToast()
 
 	React.useEffect(() => {
-		setQueryName(selectedQuery.title)
+		if (selectedQuery) {
+			setQueryName(selectedQuery.title)
+		} else {
+			setQueryName(newQueryObject.title)
+		}
 		setIsEditing(false)
-	}, [selectedQuery, setQueryName])
+	}, [selectedQuery, setQueryName, newQueryObject.title])
 
 	return (
 		<div>
@@ -42,11 +57,14 @@ export const QueryName = ({
 						variant="ghost"
 						onClick={() => {
 							setIsEditing(false)
-							updateQuery(
-								selectedQueryKey || '',
-								queryName,
-								selectedQuery.query
-							)
+							if (selectedQuery) {
+								updateQuery(selectedQueryKey, queryName, selectedQuery.query)
+							} else {
+								setNewQueryObject((prev) => ({
+									...prev,
+									title: queryName,
+								}))
+							}
 							toast({
 								title: 'Query name updated successfully!',
 							})

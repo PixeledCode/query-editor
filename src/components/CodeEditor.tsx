@@ -8,14 +8,30 @@ import 'prismjs/themes/prism.css'
 export const CodeEditor = ({
 	code,
 	setCode,
+	setNewQueryObject,
+	isNewQuery,
 }: {
 	code: string
 	setCode: React.Dispatch<React.SetStateAction<string>>
+	setNewQueryObject: React.Dispatch<
+		React.SetStateAction<{
+			title: string
+			query: string
+		}>
+	>
+
+	isNewQuery: boolean
 }) => {
 	return (
 		<Editor
 			value={code}
 			onValueChange={(code) => {
+				if (isNewQuery) {
+					setNewQueryObject((prev) => ({
+						...prev,
+						query: code,
+					}))
+				}
 				setCode(code)
 			}}
 			highlight={(code) => highlight(code, languages.sql)}

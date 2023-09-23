@@ -25,9 +25,24 @@ function randomFileName() {
 type HeaderProps = {
 	setTableData: React.Dispatch<React.SetStateAction<any[]>>
 	code: string
+	setNewQueryObject: React.Dispatch<
+		React.SetStateAction<{
+			title: string
+			query: string
+		}>
+	>
+	newQueryObject: {
+		title: string
+		query: string
+	}
 }
 
-export const QueryHeader = ({ setTableData, code }: HeaderProps) => {
+export const QueryHeader = ({
+	setTableData,
+	code,
+	newQueryObject,
+	setNewQueryObject,
+}: HeaderProps) => {
 	const { toast } = useToast()
 
 	const queries = useQueryStore((state) => state.queries)
@@ -37,11 +52,9 @@ export const QueryHeader = ({ setTableData, code }: HeaderProps) => {
 	const updateSelectedQuery = useQueryStore(
 		(state) => state.updateSelectedQuery
 	)
+	console.log(newQueryObject)
 
 	const [file, setFile] = React.useState(randomFileName)
-	const [queryName, setQueryName] = React.useState(
-		selectedQuery?.title || 'New Query'
-	)
 
 	React.useEffect(() => {
 		Papa.parse(`/csv/${file}.csv`, {
@@ -60,14 +73,9 @@ export const QueryHeader = ({ setTableData, code }: HeaderProps) => {
 			<div className="flex items-center gap-3">
 				<MobilePane />
 				<QueryName
-					selectedQuery={
-						selectedQuery || {
-							title: 'New Query',
-							query: code,
-						}
-					}
-					queryName={queryName}
-					setQueryName={setQueryName}
+					selectedQuery={selectedQuery}
+					setNewQueryObject={setNewQueryObject}
+					newQueryObject={newQueryObject}
 				/>
 			</div>
 
@@ -90,7 +98,17 @@ export const QueryHeader = ({ setTableData, code }: HeaderProps) => {
 							if (selectedQuery) {
 								updateQuery(selectedQueryKey || '', selectedQuery.title, code)
 							} else {
-								updateQuery(randomFileName(), 'New Query', code)
+								updateQuery(
+									// create a unique id for new query
+									`${slugName(newQueryObject.title)}-${new Date().valueOf()}`,
+									newQueryObject.title,
+									newQueryObject.query
+								)
+								setNewQueryObject(() => ({
+									title: 'New Query',
+									query: '',
+								}))
+								setFile(randomFileName())
 							}
 							toast({
 								title: 'Query saved successfully!',
@@ -119,4 +137,12 @@ export const QueryHeader = ({ setTableData, code }: HeaderProps) => {
 			</div>
 		</section>
 	)
+}
+
+function slugName(name: string) {
+	return name
+		.toLowerCase()
+		.replace(/ /g, '-')
+		.replace(/[^\w-]+/g, '')
+		.replace(/--+/g, '-')
 }

@@ -10,15 +10,18 @@ import { useQueryStore } from './lib/store'
 function App() {
 	const [tableData, setTableData] = React.useState([]) as any[]
 	const [code, setCode] = React.useState('')
+	const [newQueryObject, setNewQueryObject] = React.useState({
+		title: 'New Query',
+		query: code,
+	})
 
 	const queries = useQueryStore((state) => state.queries)
 	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
-
 	const selectedQuery = selectedQueryKey ? queries[selectedQueryKey] : null
-	console.log(selectedQueryKey, selectedQuery)
 
 	React.useEffect(() => {
 		if (selectedQuery) setCode(selectedQuery?.query.trim() || '')
+		else setCode('')
 	}, [selectedQuery])
 
 	return (
@@ -35,10 +38,20 @@ function App() {
 					<SavedPane />
 				</div>
 				<div className="md:w-[calc(100%_-_320px)]">
-					<QueryHeader setTableData={setTableData} code={code} />
+					<QueryHeader
+						setNewQueryObject={setNewQueryObject}
+						newQueryObject={newQueryObject}
+						setTableData={setTableData}
+						code={code}
+					/>
 					<Separator className="mt-4" />
 					<div>
-						<CodeEditor code={code} setCode={setCode} />
+						<CodeEditor
+							code={code}
+							setCode={setCode}
+							setNewQueryObject={setNewQueryObject}
+							isNewQuery={selectedQuery === null}
+						/>
 						<Separator className="mt-4" />
 						<div className="p-4">
 							<h2 className="text-lg font-bold text-start">Results</h2>
