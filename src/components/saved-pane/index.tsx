@@ -9,6 +9,7 @@ export const SavedPane = ({
 	setIsOpen?: (e: boolean) => void
 }) => {
 	const queries = useQueryStore((state) => state.queries)
+	const selectedQuery = useQueryStore((state) => state.selectedQuery)
 	const deleteQuery = useQueryStore((state) => state.deleteQuery)
 	const updateSelectedQuery = useQueryStore(
 		(state) => state.updateSelectedQuery
@@ -27,7 +28,8 @@ export const SavedPane = ({
 								variant="ghost"
 								onClick={() => {
 									deleteQuery(key)
-									updateSelectedQuery(Object.keys(queries)[0])
+									if (selectedQuery === key)
+										updateSelectedQuery(Object.keys(queries)[0])
 								}}
 							>
 								<X color="crimson" />
