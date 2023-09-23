@@ -1,37 +1,44 @@
-import { Payment, columns } from './columns'
-import { DataTable } from '../ui/data-table'
 import React from 'react'
+import { DataTable } from '../ui/data-table'
+import { Button } from '../ui/button'
+import { ArrowUpDown } from 'lucide-react'
 
-async function getData(): Promise<Payment[]> {
-	return [
-		{
-			id: '728ed52f',
-			amount: 100,
-			status: 'pending',
-			email: 'm@example.com',
-		},
-	]
-}
+export function ResultTable({ data }: any) {
+	// create columns from data
+	const columns = React.useMemo<any>(() => {
+		if (!data.length) return []
+		return (
+			Object.keys(data[0])
+				.map((value) => {
+					// skip picture column
+					if (['picture', 'photo', 'notes'].includes(value)) return
+					return {
+						accessorKey: value,
+						header: ({ column }: any) => {
+							return (
+								<Button
+									variant="ghost"
+									onClick={() =>
+										column.toggleSorting(column.getIsSorted() === 'asc')
+									}
+								>
+									{value}
+									<ArrowUpDown className="ml-2 h-4 w-4" />
+								</Button>
+							)
+						},
+					}
+				})
+				// remove undefined values
+				.filter((n) => n)
+		)
+	}, [data])
 
-export function ResultTable() {
-	const [data, setData] = React.useState<Payment[]>([])
-	const [loading, setLoading] = React.useState(false)
-
-	React.useEffect(() => {
-		setLoading(true)
-		getData().then((data) => {
-			setData(data)
-			setLoading(false)
-		})
-	}, [])
+	console.log(data)
 
 	return (
-		<div className="container mx-auto py-10">
-			{loading ? (
-				<div>Loading...</div>
-			) : (
-				<DataTable columns={columns} data={data} />
-			)}
+		<div className="mx-auto py-6">
+			<DataTable columns={columns} data={data} />
 		</div>
 	)
 }

@@ -16,5 +16,7 @@ module.exports = {
 		],
 		'@typescript-eslint/ban-ts-comment': 'off',
 		'no-mixed-spaces-and-tabs': ['error', 'smart-tabs'],
+		'@typescript-eslint/no-explicit-any': 'off',
+		'@typescript-eslint/no-unused-vars': 'warn',
 	},
 }
