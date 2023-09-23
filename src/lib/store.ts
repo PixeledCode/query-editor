@@ -44,6 +44,8 @@ interface State {
 	updateQuery: (key: string, title: string, query: string) => void
 	selectedQuery: string
 	updateSelectedQuery: (key: string) => void
+	addNewQuery: (key: string, title: string, query: string) => void
+	deleteQuery: (key: string) => void
 }
 
 export const useQueryStore = create<State>()(
@@ -60,6 +62,11 @@ export const useQueryStore = create<State>()(
 				set((state) => ({
 					queries: { ...state.queries, [key]: { title, query } },
 				})),
+			deleteQuery: (key: string) =>
+				set((state) => {
+					const { [key]: deleted, ...rest } = state.queries
+					return { queries: rest }
+				}),
 		}),
 		{
 			name: 'query-storage',
