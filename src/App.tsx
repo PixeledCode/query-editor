@@ -12,6 +12,7 @@ import 'prismjs/themes/prism.css'
 import React from 'react'
 import { ResultTable } from './components/results'
 import Papa from 'papaparse'
+import { useToast } from '@/components/ui/use-toast'
 
 const availableTables = [
 	'categories',
@@ -33,6 +34,8 @@ function App() {
 	const [code, setCode] = React.useState(
 		`SELECT CustomerName, City FROM Customers; `
 	)
+
+	const { toast } = useToast()
 
 	React.useEffect(() => {
 		Papa.parse(`/csv/${file}.csv`, {
@@ -59,13 +62,25 @@ function App() {
 					<section className="flex items-center gap-2 justify-between mt-4 px-4">
 						<h2 className="text-lg font-bold">Query Name</h2>
 						<div className="flex items-center gap-4">
-							<Button variant="secondary" size="sm">
+							<Button
+								variant="secondary"
+								size="sm"
+								onClick={() => {
+									toast({
+										title: 'Query saved successfully!',
+									})
+								}}
+							>
 								Save
 							</Button>
 							<Button
 								size="sm"
 								onClick={() => {
 									setFile(randomFileName())
+									toast({
+										title: 'Query run successfully!',
+										variant: 'default',
+									})
 								}}
 							>
 								<div className="flex items-center gap-2">

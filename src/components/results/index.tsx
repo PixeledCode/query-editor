@@ -34,8 +34,6 @@ export function ResultTable({ data }: any) {
 		)
 	}, [data])
 
-	console.log(data)
-
 	return (
 		<div className="mx-auto py-6">
 			<DataTable columns={columns} data={data} />
