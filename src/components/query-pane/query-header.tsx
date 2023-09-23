@@ -1,4 +1,4 @@
-import { Play } from 'lucide-react'
+import { Play, Plus } from 'lucide-react'
 import { Button } from '../ui/button'
 import { useToast } from '../ui/use-toast'
 import { QueryName } from './query-name'
@@ -6,6 +6,7 @@ import React from 'react'
 import Papa from 'papaparse'
 import { useQueryStore } from '@/lib/store'
 import { MobilePane } from '../saved-pane/mobile'
+import { Separator } from '../ui/separator'
 
 const availableTables = [
 	'categories',
@@ -27,13 +28,20 @@ type HeaderProps = {
 }
 
 export const QueryHeader = ({ setTableData, code }: HeaderProps) => {
-	const [file, setFile] = React.useState(randomFileName)
 	const { toast } = useToast()
 
 	const queries = useQueryStore((state) => state.queries)
 	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
-	const selectedQuery = queries[selectedQueryKey]
+	const selectedQuery = selectedQueryKey ? queries[selectedQueryKey] : null
 	const updateQuery = useQueryStore((state) => state.updateQuery)
+	const updateSelectedQuery = useQueryStore(
+		(state) => state.updateSelectedQuery
+	)
+
+	const [file, setFile] = React.useState(randomFileName)
+	const [queryName, setQueryName] = React.useState(
+		selectedQuery?.title || 'New Query'
+	)
 
 	React.useEffect(() => {
 		Papa.parse(`/csv/${file}.csv`, {
@@ -51,22 +59,48 @@ export const QueryHeader = ({ setTableData, code }: HeaderProps) => {
 		<section className="flex items-center flex-wrap gap-2 justify-between mt-4 px-4">
 			<div className="flex items-center gap-3">
 				<MobilePane />
-				<QueryName selectedQuery={selectedQuery} />
+				<QueryName
+					selectedQuery={
+						selectedQuery || {
+							title: 'New Query',
+							query: code,
+						}
+					}
+					queryName={queryName}
+					setQueryName={setQueryName}
+				/>
 			</div>
 
 			<div className="flex items-center gap-4">
-				<Button
-					variant="secondary"
-					size="sm"
-					onClick={() => {
-						updateQuery(selectedQueryKey, selectedQuery.title, code)
-						toast({
-							title: 'Query saved successfully!',
-						})
-					}}
-				>
-					Save
-				</Button>
+				<div className="flex items-center gap-2">
+					<Button
+						variant="secondary"
+						size="sm"
+						onClick={() => {
+							updateSelectedQuery('')
+						}}
+					>
+						<Plus size={16} />
+						<span className="sr-only">New Query</span>
+					</Button>
+					<Button
+						variant="secondary"
+						size="sm"
+						onClick={() => {
+							if (selectedQuery) {
+								updateQuery(selectedQueryKey || '', selectedQuery.title, code)
+							} else {
+								updateQuery(randomFileName(), 'New Query', code)
+							}
+							toast({
+								title: 'Query saved successfully!',
+							})
+						}}
+					>
+						Save
+					</Button>
+				</div>
+				<Separator orientation="vertical" className="h-8" />
 				<Button
 					size="sm"
 					onClick={() => {

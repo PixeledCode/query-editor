@@ -6,13 +6,16 @@ import { useToast } from '../ui/use-toast'
 
 export const QueryName = ({
 	selectedQuery,
+	queryName,
+	setQueryName,
 }: {
 	selectedQuery: {
 		title: string
 		query: string
 	}
+	queryName: string
+	setQueryName: React.Dispatch<React.SetStateAction<string>>
 }) => {
-	const [queryName, setQueryName] = React.useState(selectedQuery.title)
 	const [isEditing, setIsEditing] = React.useState(false)
 	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
 	const updateQuery = useQueryStore((state) => state.updateQuery)
@@ -22,7 +25,7 @@ export const QueryName = ({
 	React.useEffect(() => {
 		setQueryName(selectedQuery.title)
 		setIsEditing(false)
-	}, [selectedQuery])
+	}, [selectedQuery, setQueryName])
 
 	return (
 		<div>
@@ -39,7 +42,11 @@ export const QueryName = ({
 						variant="ghost"
 						onClick={() => {
 							setIsEditing(false)
-							updateQuery(selectedQueryKey, queryName, selectedQuery.query)
+							updateQuery(
+								selectedQueryKey || '',
+								queryName,
+								selectedQuery.query
+							)
 							toast({
 								title: 'Query name updated successfully!',
 							})

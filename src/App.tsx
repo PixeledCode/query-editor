@@ -1,15 +1,10 @@
 import { Github } from 'lucide-react'
-import Editor from 'react-simple-code-editor'
-import { Separator } from './components/ui/separator'
-// @ts-ignore
-import { highlight, languages } from 'prismjs/components/prism-core'
-import 'prismjs/components/prism-clike'
-import 'prismjs/components/prism-sql'
-import 'prismjs/themes/prism.css'
 import React from 'react'
-import { ResultTable } from './components/results'
+import { CodeEditor } from './components/CodeEditor'
 import { QueryHeader } from './components/query-pane'
+import { ResultTable } from './components/results'
 import { SavedPane } from './components/saved-pane'
+import { Separator } from './components/ui/separator'
 import { useQueryStore } from './lib/store'
 
 function App() {
@@ -18,10 +13,12 @@ function App() {
 
 	const queries = useQueryStore((state) => state.queries)
 	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
-	const selectedQuery = queries[selectedQueryKey]
+
+	const selectedQuery = selectedQueryKey ? queries[selectedQueryKey] : null
+	console.log(selectedQueryKey, selectedQuery)
 
 	React.useEffect(() => {
-		setCode(selectedQuery?.query.trim() || '')
+		if (selectedQuery) setCode(selectedQuery?.query.trim() || '')
 	}, [selectedQuery])
 
 	return (
@@ -41,20 +38,7 @@ function App() {
 					<QueryHeader setTableData={setTableData} code={code} />
 					<Separator className="mt-4" />
 					<div>
-						<Editor
-							value={code}
-							onValueChange={(code) => {
-								setCode(code)
-							}}
-							highlight={(code) => highlight(code, languages.sql)}
-							padding={10}
-							style={{
-								fontFamily: '"Fira code", "Fira Mono", monospace',
-								fontSize: 12,
-								height: '400px',
-								overflow: 'scroll',
-							}}
-						/>
+						<CodeEditor code={code} setCode={setCode} />
 						<Separator className="mt-4" />
 						<div className="p-4">
 							<h2 className="text-lg font-bold text-start">Results</h2>

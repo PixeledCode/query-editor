@@ -56,6 +56,10 @@ export const useQueryStore = create<State>()(
 				set((state) => ({
 					queries: { ...state.queries, [key]: { title, query } },
 				})),
+			addNewQuery: (key: string, title: string, query: string) =>
+				set((state) => ({
+					queries: { ...state.queries, [key]: { title, query } },
+				})),
 		}),
 		{
 			name: 'query-storage',
