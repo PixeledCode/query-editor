@@ -1,7 +1,7 @@
 import React from 'react'
 import { DataTable } from '../ui/data-table'
 import { Button } from '../ui/button'
-import { ArrowUpDown } from 'lucide-react'
+import { ArrowDown, ArrowUp } from 'lucide-react'
 
 export function ResultTable({ data }: any) {
 	// create columns from data
@@ -23,7 +23,11 @@ export function ResultTable({ data }: any) {
 									}
 								>
 									{value}
-									<ArrowUpDown className="ml-2 h-4 w-4" />
+									{column.getIsSorted() === 'asc' ? (
+										<ArrowDown className="ml-2 h-4 w-4" />
+									) : (
+										<ArrowUp className="ml-2 h-4 w-4" />
+									)}
 								</Button>
 							)
 						},

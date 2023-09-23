@@ -13,7 +13,7 @@ export const MobilePane = () => {
 					<span className="sr-only">saved queries</span>
 					<Menu />
 				</SheetTrigger>
-				<SheetContent side="left" className="h-[100vh] overflow-y-auto">
+				<SheetContent side="left" className="h-[100vh] overflow-y-auto w-auto">
 					<SavedPane />
 				</SheetContent>
 			</Sheet>

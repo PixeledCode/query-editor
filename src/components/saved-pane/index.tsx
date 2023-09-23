@@ -8,7 +8,7 @@ export const SavedPane = () => {
 	)
 
 	return (
-		<div className="py-4 pb-0 border-r border-solid border-zinc-300 min-h-[calc(100vh_-_44px)] min-w-[320px]">
+		<div className="pt-4 border-r border-solid border-zinc-300 min-h-[calc(100vh_-_44px)] w-[320px]">
 			<h2 className="px-4 text-lg font-bold text-start">Saved Queries</h2>
 			<Separator className="mt-3" />
 			<div className="mt-4 flex flex-col gap-6">
@@ -25,7 +25,7 @@ export const SavedPane = () => {
 							{queries[key].title}
 						</h3>
 
-						<pre className=" overflow-auto pb-3">
+						<pre className="w-full overflow-auto pb-3">
 							{queries[key].query.trim()}
 						</pre>
 					</button>
