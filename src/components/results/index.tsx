@@ -10,7 +10,7 @@ export function ResultTable({ data }: any) {
 		return (
 			Object.keys(data[0])
 				.map((value) => {
-					// skip picture column
+					// skip few columns that are too big
 					if (['picture', 'photo', 'notes'].includes(value)) return
 					return {
 						accessorKey: value,

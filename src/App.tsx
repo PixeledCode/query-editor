@@ -1,8 +1,6 @@
 import { Github } from 'lucide-react'
 import Editor from 'react-simple-code-editor'
-import './App.css'
 import { Separator } from './components/ui/separator'
-
 // @ts-ignore
 import { highlight, languages } from 'prismjs/components/prism-core'
 import 'prismjs/components/prism-clike'
@@ -39,11 +37,14 @@ function App() {
 			header: true,
 			download: true,
 			dynamicTyping: true,
+			skipEmptyLines: true,
 			complete: function (results) {
-				setTableData(results.data.filter((e: any) => e.customerID !== null))
+				setTableData(results.data)
 			},
 		})
 	}, [file])
+
+	console.log(tableData)
 
 	return (
 		<>
