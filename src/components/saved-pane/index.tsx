@@ -1,4 +1,3 @@
-import { CodeBlock } from 'react-code-blocks'
 import { Separator } from '../ui/separator'
 import { useQueryStore } from '@/lib/store'
 
@@ -25,11 +24,10 @@ export const SavedPane = () => {
 						<h3 className="text-sm font-bold text-start">
 							{queries[key].title}
 						</h3>
-						<CodeBlock
-							text={queries[key].query.trim()}
-							language="sql"
-							showLineNumbers={false}
-						/>
+
+						<pre className=" overflow-auto pb-3">
+							{queries[key].query.trim()}
+						</pre>
 					</button>
 				))}
 			</div>
