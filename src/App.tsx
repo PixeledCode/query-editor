@@ -39,12 +39,15 @@ function App() {
 					<QueryHeader
 						setTableData={setTableData}
 						selectedQuery={selectedQuery}
+						code={code}
 					/>
 					<Separator className="mt-4" />
 					<div>
 						<Editor
 							value={code}
-							onValueChange={(code) => setCode(code)}
+							onValueChange={(code) => {
+								setCode(code)
+							}}
 							highlight={(code) => highlight(code, languages.sql)}
 							padding={10}
 							style={{

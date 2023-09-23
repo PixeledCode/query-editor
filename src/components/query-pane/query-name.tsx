@@ -2,6 +2,7 @@ import { Pencil, Check } from 'lucide-react'
 import React from 'react'
 import { Button } from '../ui/button'
 import { useQueryStore } from '@/lib/store'
+import { useToast } from '../ui/use-toast'
 
 export const QueryName = ({
 	selectedQuery,
@@ -15,6 +16,8 @@ export const QueryName = ({
 	const [isEditing, setIsEditing] = React.useState(false)
 	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
 	const updateQuery = useQueryStore((state) => state.updateQuery)
+
+	const { toast } = useToast()
 
 	React.useEffect(() => {
 		setQueryName(selectedQuery.title)
@@ -37,6 +40,9 @@ export const QueryName = ({
 						onClick={() => {
 							setIsEditing(false)
 							updateQuery(selectedQueryKey, queryName, selectedQuery.query)
+							toast({
+								title: 'Query name updated successfully!',
+							})
 						}}
 					>
 						<span className=" sr-only">Save query name</span>

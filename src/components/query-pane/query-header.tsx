@@ -4,6 +4,7 @@ import { useToast } from '../ui/use-toast'
 import { QueryName } from './query-name'
 import React from 'react'
 import Papa from 'papaparse'
+import { useQueryStore } from '@/lib/store'
 
 const availableTables = [
 	'categories',
@@ -21,12 +22,23 @@ function randomFileName() {
 
 type HeaderProps = {
 	setTableData: React.Dispatch<React.SetStateAction<any[]>>
-	selectedQuery: any
+	selectedQuery: {
+		title: string
+		query: string
+	}
+	code: string
 }
 
-export const QueryHeader = ({ setTableData, selectedQuery }: HeaderProps) => {
+export const QueryHeader = ({
+	setTableData,
+	selectedQuery,
+	code,
+}: HeaderProps) => {
 	const [file, setFile] = React.useState(randomFileName)
 	const { toast } = useToast()
+
+	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
+	const updateQuery = useQueryStore((state) => state.updateQuery)
 
 	React.useEffect(() => {
 		Papa.parse(`/csv/${file}.csv`, {
@@ -48,6 +60,7 @@ export const QueryHeader = ({ setTableData, selectedQuery }: HeaderProps) => {
 					variant="secondary"
 					size="sm"
 					onClick={() => {
+						updateQuery(selectedQueryKey, selectedQuery.title, code)
 						toast({
 							title: 'Query saved successfully!',
 						})
