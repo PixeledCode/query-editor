@@ -1,10 +1,25 @@
 import { Pencil, Check } from 'lucide-react'
 import React from 'react'
 import { Button } from '../ui/button'
+import { useQueryStore } from '@/lib/store'
 
-export const QueryName = () => {
-	const [queryName, setQueryName] = React.useState('Customers')
+export const QueryName = ({
+	selectedQuery,
+}: {
+	selectedQuery: {
+		title: string
+		query: string
+	}
+}) => {
+	const [queryName, setQueryName] = React.useState(selectedQuery.title)
 	const [isEditing, setIsEditing] = React.useState(false)
+	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
+	const updateQuery = useQueryStore((state) => state.updateQuery)
+
+	React.useEffect(() => {
+		setQueryName(selectedQuery.title)
+		setIsEditing(false)
+	}, [selectedQuery])
 
 	return (
 		<div>
@@ -21,6 +36,7 @@ export const QueryName = () => {
 						variant="ghost"
 						onClick={() => {
 							setIsEditing(false)
+							updateQuery(selectedQueryKey, queryName, selectedQuery.query)
 						}}
 					>
 						<span className=" sr-only">Save query name</span>

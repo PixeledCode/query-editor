@@ -2,18 +2,47 @@ import { Play } from 'lucide-react'
 import { Button } from '../ui/button'
 import { useToast } from '../ui/use-toast'
 import { QueryName } from './query-name'
+import React from 'react'
+import Papa from 'papaparse'
 
-type HeaderProps = {
-	randomFileName: () => string
-	setFile: (fileName: string) => void
+const availableTables = [
+	'categories',
+	'customers',
+	'employees',
+	'order_details',
+	'orders',
+	'products',
+	'suppliers',
+]
+
+function randomFileName() {
+	return availableTables[Math.floor(Math.random() * availableTables.length)]
 }
 
-export const QueryHeader = ({ randomFileName, setFile }: HeaderProps) => {
+type HeaderProps = {
+	setTableData: React.Dispatch<React.SetStateAction<any[]>>
+	selectedQuery: any
+}
+
+export const QueryHeader = ({ setTableData, selectedQuery }: HeaderProps) => {
+	const [file, setFile] = React.useState(randomFileName)
 	const { toast } = useToast()
+
+	React.useEffect(() => {
+		Papa.parse(`/csv/${file}.csv`, {
+			header: true,
+			download: true,
+			dynamicTyping: true,
+			skipEmptyLines: true,
+			complete: function (results) {
+				setTableData(results.data)
+			},
+		})
+	}, [file, setTableData])
 
 	return (
 		<section className="flex items-center gap-2 justify-between mt-4 px-4">
-			<QueryName />
+			<QueryName selectedQuery={selectedQuery} />
 			<div className="flex items-center gap-4">
 				<Button
 					variant="secondary"

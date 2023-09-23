@@ -8,42 +8,21 @@ import 'prismjs/components/prism-sql'
 import 'prismjs/themes/prism.css'
 import React from 'react'
 import { ResultTable } from './components/results'
-import Papa from 'papaparse'
 import { QueryHeader } from './components/query-pane'
 import { SavedPane } from './components/saved-pane'
-
-const availableTables = [
-	'categories',
-	'customers',
-	'employees',
-	'order_details',
-	'orders',
-	'products',
-	'suppliers',
-]
-
-function randomFileName() {
-	return availableTables[Math.floor(Math.random() * availableTables.length)]
-}
+import { useQueryStore } from './lib/store'
 
 function App() {
 	const [tableData, setTableData] = React.useState([]) as any[]
-	const [file, setFile] = React.useState(randomFileName)
-	const [code, setCode] = React.useState(
-		`SELECT CustomerName, City FROM Customers; `
-	)
+	const [code, setCode] = React.useState('')
+
+	const queries = useQueryStore((state) => state.queries)
+	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
+	const selectedQuery = queries[selectedQueryKey]
 
 	React.useEffect(() => {
-		Papa.parse(`/csv/${file}.csv`, {
-			header: true,
-			download: true,
-			dynamicTyping: true,
-			skipEmptyLines: true,
-			complete: function (results) {
-				setTableData(results.data)
-			},
-		})
-	}, [file])
+		setCode(selectedQuery?.query.trim() || '')
+	}, [selectedQuery])
 
 	return (
 		<>
@@ -57,7 +36,10 @@ function App() {
 			<main className="flex">
 				<SavedPane />
 				<div className="w-[calc(100%_-_320px)]">
-					<QueryHeader setFile={setFile} randomFileName={randomFileName} />
+					<QueryHeader
+						setTableData={setTableData}
+						selectedQuery={selectedQuery}
+					/>
 					<Separator className="mt-4" />
 					<div>
 						<Editor
