@@ -6,6 +6,7 @@ import { ResultTable } from './components/results'
 import { SavedPane } from './components/saved-pane'
 import { Separator } from './components/ui/separator'
 import { useQueryStore } from './lib/store'
+import { useReportPageLoadMetrics } from './lib/utils'
 
 function App() {
 	const [tableData, setTableData] = React.useState([]) as any[]
@@ -28,6 +29,9 @@ function App() {
 			})
 		}
 	}, [selectedQuery])
+
+	// report page load metrics in devtools
+	useReportPageLoadMetrics()
 
 	return (
 		<>
