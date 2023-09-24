@@ -36,3 +36,9 @@ npm run preview
 - [ShadcnUI](https://ui.shadcn.com/)
 - [PapaParse](https://www.papaparse.com/)
 - [Zustand](https://zustand-demo.pmnd.rs/)
+
+## Page Speed
+
+The page load test was done on GTMetrix which pings the website from Canada. The report can be found [here](https://gtmetrix.com/reports/query-editor-flame.vercel.app/MxfopRfl/).
+
+Fully Loaded Time is `375ms`
