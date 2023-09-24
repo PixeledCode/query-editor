@@ -1,46 +1,32 @@
 import { Pencil, Check } from 'lucide-react'
 import React from 'react'
 import { Button } from '../ui/button'
-import { useQueryStore } from '@/lib/store'
 import { useToast } from '../ui/use-toast'
 
 export const QueryName = ({
-	selectedQuery,
-	setNewQueryObject,
-	newQueryObject,
+	query,
+	setQuery,
 }: {
-	selectedQuery: {
+	query: {
 		title: string
-		query: string
-	} | null
-	setNewQueryObject: React.Dispatch<
+		code: string
+	}
+	setQuery: React.Dispatch<
 		React.SetStateAction<{
 			title: string
-			query: string
+			code: string
 		}>
 	>
-	newQueryObject: {
-		title: string
-		query: string
-	}
 }) => {
-	const [queryName, setQueryName] = React.useState(
-		selectedQuery ? selectedQuery?.title : newQueryObject.title
-	)
+	const [queryName, setQueryName] = React.useState(query.title)
 	const [isEditing, setIsEditing] = React.useState(false)
-	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
-	const updateQuery = useQueryStore((state) => state.updateQuery)
 
 	const { toast } = useToast()
 
 	React.useEffect(() => {
-		if (selectedQuery) {
-			setQueryName(selectedQuery.title)
-		} else {
-			setQueryName(newQueryObject.title)
-		}
+		setQueryName(query.title)
 		setIsEditing(false)
-	}, [selectedQuery, setQueryName, newQueryObject.title])
+	}, [query.title, setQueryName])
 
 	return (
 		<div>
@@ -57,16 +43,13 @@ export const QueryName = ({
 						variant="ghost"
 						onClick={() => {
 							setIsEditing(false)
-							if (selectedQuery) {
-								updateQuery(selectedQueryKey, queryName, selectedQuery.query)
-							} else {
-								setNewQueryObject((prev) => ({
-									...prev,
-									title: queryName,
-								}))
-							}
+							setQuery((prev) => ({
+								...prev,
+								title: queryName,
+							}))
+
 							toast({
-								title: 'Query name updated successfully!',
+								title: 'Click on save to update name',
 							})
 						}}
 					>

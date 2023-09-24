@@ -8,46 +8,24 @@ import { useQueryStore } from '@/lib/store'
 import { MobilePane } from '../saved-pane/mobile'
 import { Separator } from '../ui/separator'
 
-const availableTables = [
-	'categories',
-	'customers',
-	'employees',
-	'order_details',
-	'orders',
-	'products',
-	'suppliers',
-]
-
-function randomFileName() {
-	return availableTables[Math.floor(Math.random() * availableTables.length)]
-}
-
 type HeaderProps = {
 	setTableData: React.Dispatch<React.SetStateAction<any[]>>
-	code: string
-	setNewQueryObject: React.Dispatch<
+	query: {
+		title: string
+		code: string
+	}
+	setQuery: React.Dispatch<
 		React.SetStateAction<{
 			title: string
-			query: string
+			code: string
 		}>
 	>
-	newQueryObject: {
-		title: string
-		query: string
-	}
 }
 
-export const QueryHeader = ({
-	setTableData,
-	code,
-	newQueryObject,
-	setNewQueryObject,
-}: HeaderProps) => {
+export const QueryHeader = ({ query, setQuery, setTableData }: HeaderProps) => {
 	const { toast } = useToast()
 
-	const queries = useQueryStore((state) => state.queries)
 	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
-	const selectedQuery = selectedQueryKey ? queries[selectedQueryKey] : null
 	const updateQuery = useQueryStore((state) => state.updateQuery)
 	const updateSelectedQuery = useQueryStore(
 		(state) => state.updateSelectedQuery
@@ -71,11 +49,7 @@ export const QueryHeader = ({
 		<section className="flex items-center flex-wrap gap-2 justify-between mt-4 px-4">
 			<div className="flex items-center gap-3">
 				<MobilePane />
-				<QueryName
-					selectedQuery={selectedQuery}
-					setNewQueryObject={setNewQueryObject}
-					newQueryObject={newQueryObject}
-				/>
+				<QueryName query={query} setQuery={setQuery} />
 			</div>
 
 			<div className="flex items-center gap-4">
@@ -97,19 +71,13 @@ export const QueryHeader = ({
 						variant="secondary"
 						size="sm"
 						onClick={() => {
-							if (selectedQuery) {
-								updateQuery(selectedQueryKey || '', selectedQuery.title, code)
+							if (selectedQueryKey) {
+								updateQuery(selectedQueryKey, query.title, query.code)
 							} else {
-								updateQuery(
-									// create a unique id for new query
-									`${slugName(newQueryObject.title)}-${new Date().valueOf()}`,
-									newQueryObject.title,
-									newQueryObject.query
-								)
-								setNewQueryObject(() => ({
-									title: 'New Query',
-									query: '',
-								}))
+								const newQueryId = idByName(query.title)
+								updateQuery(newQueryId, query.title, query.code)
+								updateSelectedQuery(newQueryId)
+
 								setFile(randomFileName())
 							}
 							toast({
@@ -120,6 +88,7 @@ export const QueryHeader = ({
 						Save
 					</Button>
 				</div>
+
 				<Separator orientation="vertical" className="h-8" />
 				<Button
 					size="sm"
@@ -141,10 +110,26 @@ export const QueryHeader = ({
 	)
 }
 
-function slugName(name: string) {
-	return name
+function idByName(name: string) {
+	const slugged = name
 		.toLowerCase()
 		.replace(/ /g, '-')
 		.replace(/[^\w-]+/g, '')
 		.replace(/--+/g, '-')
+
+	return `${slugged}-${new Date().valueOf()}`
+}
+
+const availableTables = [
+	'categories',
+	'customers',
+	'employees',
+	'order_details',
+	'orders',
+	'products',
+	'suppliers',
+]
+
+function randomFileName() {
+	return availableTables[Math.floor(Math.random() * availableTables.length)]
 }

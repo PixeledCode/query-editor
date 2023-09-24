@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware'
 const savedQueries = {
 	'all-users': {
 		title: 'All Users',
-		query: `
+		code: `
     query {
       users {
       id
@@ -15,11 +15,11 @@ const savedQueries = {
 	},
 	customers: {
 		title: 'Customers',
-		query: `SELECT CustomerName, City FROM Customers;`,
+		code: `SELECT CustomerName, City FROM Customers;`,
 	},
 	employees: {
 		title: 'Employees',
-		query: `
+		code: `
     query {
       employees {
         id
@@ -40,11 +40,11 @@ const savedQueries = {
 }
 
 interface State {
-	queries: Record<string, { title: string; query: string }>
-	updateQuery: (key: string, title: string, query: string) => void
+	queries: Record<string, { title: string; code: string }>
+	updateQuery: (key: string, title: string, code: string) => void
 	selectedQuery: string
 	updateSelectedQuery: (key: string) => void
-	addNewQuery: (key: string, title: string, query: string) => void
+	addNewQuery: (key: string, title: string, code: string) => void
 	deleteQuery: (key: string) => void
 }
 
@@ -54,13 +54,13 @@ export const useQueryStore = create<State>()(
 			queries: savedQueries,
 			selectedQuery: 'customers',
 			updateSelectedQuery: (key: string) => set({ selectedQuery: key }),
-			updateQuery: (key: string, title: string, query: string) =>
+			updateQuery: (key: string, title: string, code: string) =>
 				set((state) => ({
-					queries: { ...state.queries, [key]: { title, query } },
+					queries: { ...state.queries, [key]: { title, code } },
 				})),
-			addNewQuery: (key: string, title: string, query: string) =>
+			addNewQuery: (key: string, title: string, code: string) =>
 				set((state) => ({
-					queries: { ...state.queries, [key]: { title, query } },
+					queries: { ...state.queries, [key]: { title, code } },
 				})),
 			deleteQuery: (key: string) =>
 				set((state) => {
