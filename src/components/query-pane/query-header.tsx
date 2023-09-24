@@ -3,13 +3,12 @@ import { Button } from '../ui/button'
 import { useToast } from '../ui/use-toast'
 import { QueryName } from './query-name'
 import React from 'react'
-import Papa from 'papaparse'
 import { useQueryStore } from '@/lib/store'
 import { MobilePane } from '../saved-pane/mobile'
 import { Separator } from '../ui/separator'
 
 type HeaderProps = {
-	setTableData: React.Dispatch<React.SetStateAction<any[]>>
+	setFile: React.Dispatch<React.SetStateAction<string>>
 	query: {
 		title: string
 		code: string
@@ -20,9 +19,15 @@ type HeaderProps = {
 			code: string
 		}>
 	>
+	randomFileName: () => string
 }
 
-export const QueryHeader = ({ query, setQuery, setTableData }: HeaderProps) => {
+export const QueryHeader = ({
+	query,
+	setQuery,
+	setFile,
+	randomFileName,
+}: HeaderProps) => {
 	const { toast } = useToast()
 
 	const selectedQueryKey = useQueryStore((state) => state.selectedQuery)
@@ -30,20 +35,6 @@ export const QueryHeader = ({ query, setQuery, setTableData }: HeaderProps) => {
 	const updateSelectedQuery = useQueryStore(
 		(state) => state.updateSelectedQuery
 	)
-
-	const [file, setFile] = React.useState(randomFileName)
-
-	React.useEffect(() => {
-		Papa.parse(`/csv/${file}.csv`, {
-			header: true,
-			download: true,
-			dynamicTyping: true,
-			skipEmptyLines: true,
-			complete: function (results) {
-				setTableData(results.data)
-			},
-		})
-	}, [file, setTableData])
 
 	return (
 		<section className="flex items-center flex-wrap gap-2 justify-between mt-4 px-4">
@@ -118,18 +109,4 @@ function idByName(name: string) {
 		.replace(/--+/g, '-')
 
 	return `${slugged}-${new Date().valueOf()}`
-}
-
-const availableTables = [
-	'categories',
-	'customers',
-	'employees',
-	'order_details',
-	'orders',
-	'products',
-	'suppliers',
-]
-
-function randomFileName() {
-	return availableTables[Math.floor(Math.random() * availableTables.length)]
 }

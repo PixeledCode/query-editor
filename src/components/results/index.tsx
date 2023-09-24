@@ -3,7 +3,13 @@ import { DataTable } from '../ui/data-table'
 import { Button } from '../ui/button'
 import { ArrowDown, ArrowUp } from 'lucide-react'
 
-export function ResultTable({ data }: any) {
+export function ResultTable({
+	data,
+	loading,
+}: {
+	data: any[]
+	loading: boolean
+}) {
 	// create columns from data
 	const columns = React.useMemo<any>(() => {
 		if (!data.length) return []
@@ -40,7 +46,13 @@ export function ResultTable({ data }: any) {
 
 	return (
 		<div className="mx-auto py-6">
-			<DataTable columns={columns} data={data} />
+			{loading ? (
+				<div className="flex items-center justify-center">
+					<span className=" text-4xl">Loading...</span>
+				</div>
+			) : (
+				<DataTable columns={columns} data={data} />
+			)}
 		</div>
 	)
 }

@@ -6,9 +6,12 @@ import { ResultTable } from './components/results'
 import { SavedPane } from './components/saved-pane'
 import { Separator } from './components/ui/separator'
 import { useQueryStore } from './lib/store'
+import Papa from 'papaparse'
 
 function App() {
 	const [tableData, setTableData] = React.useState([]) as any[]
+	const [file, setFile] = React.useState(randomFileName)
+	const [loading, setLoading] = React.useState(false)
 	const [query, setQuery] = React.useState({
 		title: '',
 		code: '',
@@ -29,6 +32,20 @@ function App() {
 		}
 	}, [selectedQuery])
 
+	React.useEffect(() => {
+		setLoading(true)
+		Papa.parse(`/csv/${file}.csv`, {
+			header: true,
+			download: true,
+			dynamicTyping: true,
+			skipEmptyLines: true,
+			complete: function (results) {
+				setTableData(results.data)
+				setLoading(false)
+			},
+		})
+	}, [file, setTableData])
+
 	return (
 		<>
 			<SiteHeader />
@@ -41,7 +58,8 @@ function App() {
 					<QueryHeader
 						query={query}
 						setQuery={setQuery}
-						setTableData={setTableData}
+						setFile={setFile}
+						randomFileName={randomFileName}
 					/>
 					<Separator className="mt-4" />
 					<div>
@@ -50,7 +68,7 @@ function App() {
 						<Separator className="mt-4" />
 						<div className="p-4">
 							<h2 className="text-lg font-bold text-start">Results</h2>
-							<ResultTable data={tableData} />
+							<ResultTable data={tableData} loading={loading} />
 						</div>
 					</div>
 				</div>
@@ -60,3 +78,17 @@ function App() {
 }
 
 export default App
+
+const availableTables = [
+	'categories',
+	'customers',
+	'employees',
+	'order_details',
+	'orders',
+	'products',
+	'suppliers',
+]
+
+function randomFileName() {
+	return availableTables[Math.floor(Math.random() * availableTables.length)]
+}
