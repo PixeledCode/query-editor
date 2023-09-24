@@ -56,7 +56,7 @@ export const SavedPane = ({
 							</h3>
 
 							<pre className="w-full overflow-auto pb-3">
-								{queries[key].code.trim()}
+								{queries[key].code?.trim() || 'No query code'}
 							</pre>
 						</button>
 					</div>
