@@ -31,7 +31,7 @@ function App() {
 	}, [selectedQuery])
 
 	// report page load metrics in devtools
-	useReportPageLoadMetrics()
+	// useReportPageLoadMetrics()
 
 	return (
 		<>
