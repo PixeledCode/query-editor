@@ -87,9 +87,12 @@ export const QueryHeader = ({
 							updateSelectedQuery('')
 						}}
 					>
-						<Plus size={16} />
-						<span className="sr-only">New Query</span>
+						<div className="flex items-center gap-2">
+							<Plus size={16} />
+							<span>Create</span>
+						</div>
 					</Button>
+
 					<Button
 						variant="secondary"
 						size="sm"

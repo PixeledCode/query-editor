@@ -1,4 +1,4 @@
-import { X } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
 import { useQueryStore } from '@/lib/store'
@@ -32,7 +32,7 @@ export const SavedPane = ({
 										updateSelectedQuery(Object.keys(queries)[0])
 								}}
 							>
-								<X color="crimson" />
+								<Trash2 size={16} color="crimson" />
 								<span className="sr-only">Delete Query</span>
 							</Button>
 						</div>
