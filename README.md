@@ -11,6 +11,22 @@ A dummy application of a query editor. The idea is to write queries and see the 
 - Delete an existing query
 - Save queries in local storage
 
+## How to run
+
+```js
+// Install dependencies
+npm install
+
+// Run the app
+npm run dev
+
+// Build the app
+npm run build
+
+// Run the built app
+npm run preview
+```
+
 ## Tech
 
 - [ReactJS](https://reactjs.org/)
