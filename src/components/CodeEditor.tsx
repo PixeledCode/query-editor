@@ -31,6 +31,7 @@ export const CodeEditor = ({
 			}}
 			highlight={(code) => highlight(code, languages.sql)}
 			padding={10}
+			aria-label="Code Editor"
 			style={{
 				fontFamily: '"Fira code", "Fira Mono", monospace',
 				fontSize: 12,
